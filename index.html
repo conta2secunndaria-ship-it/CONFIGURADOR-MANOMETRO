@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurador de Manômetros QUALITEC</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <h1 class="logo">QUALITEC</h1>
+                    <h2 class="title">Configurador de Manômetros</h2>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <div class="configurator-layout">
+                    <!-- Left Panel - Filters -->
+                    <div class="filters-panel">
+                        <div class="panel-header">
+                            <h3>Configuração do Produto</h3>
+                        </div>
+
+                        <!-- Part Number Input -->
+                        <div class="filter-section">
+                            <label class="form-label">Part Number (Opcional)</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="partNumberInput" 
+                                placeholder="Ex: 233.30-E-BG616K-MI-UZHZCZZ-AHAZZZZ"
+                                oninput="handlePartNumberInput()"
+                            >
+                            <p class="help-text">Digite o Part Number para preencher automaticamente os filtros</p>
+                            <div id="partNumberStatus" class="validation-message" style="display: none;"></div>
+                        </div>
+
+                        <!-- Sequential Filters -->
+                        <div class="filter-section">
+                            <label class="form-label">1. Enchimento da Caixa</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="enchimento" value="glicerina" onchange="updateConfiguration()">
+                                    <span>SIM - Com Glicerina</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="enchimento" value="sem" onchange="updateConfiguration()">
+                                    <span>NÃO - Sem Enchimento</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="filter-section">
+                            <label class="form-label">2. Dimensão Nominal (DN)</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="dimensao" value="63mm" onchange="updateConfiguration()">
+                                    <span>63mm (Classe 1.6)</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="dimensao" value="100mm" onchange="updateConfiguration()">
+                                    <span>100mm (Classe 1.0)</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="dimensao" value="160mm" onchange="updateConfiguration()">
+                                    <span>160mm (Classe 1.0)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="filter-section">
+                            <label class="form-label">3. Unidade da Escala Principal</label>
+                            <select class="form-control" id="unidade" onchange="updateConfiguration()">
+                                <option value="">Selecione...</option>
+                                <option value="bar">bar</option>
+                                <option value="psi">psi/-inHg</option>
+                                <option value="kpa">kPa</option>
+                                <option value="mpa">MPa</option>
+                                <option value="kgcm2">kg/cm²</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-section">
+                            <label class="form-label">4. Tipo de Medição</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="tipoMedicao" value="pressao" onchange="updateConfiguration()">
+                                    <span>Escala de Pressão</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="tipoMedicao" value="vacuo_composta" onchange="updateConfiguration()">
+                                    <span>Escala Composta ou Vácuo</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="filter-section">
+                            <label class="form-label">5. Faixa de Indicação</label>
+                            <select class="form-control" id="faixa" onchange="updateConfiguration()">
+                                <option value="">Selecione...</option>
+                                <option value="-0,6...0 bar">-0,6...0 bar</option>
+                                <option value="-1...0 bar">-1...0 bar</option>
+                                <option value="-1...+0,6 bar">-1...+0,6 bar</option>
+                                <option value="-1...+1 bar">-1...+1 bar</option>
+                                <option value="-1...+1,5 bar">-1...+1,5 bar</option>
+                                <option value="-1...+2 bar">-1...+2 bar</option>
+                                <option value="-1...+3 bar">-1...+3 bar</option>
+                                <option value="-1...+4 bar">-1...+4 bar</option>
+                                <option value="0...1 bar">0...1 bar</option>
+                                <option value="0...1,6 bar">0...1,6 bar</option>
+                                <option value="0...2,5 bar">0...2,5 bar</option>
+                                <option value="0...4 bar">0...4 bar</option>
+                                <option value="0...6 bar">0...6 bar</option>
+                                <option value="0...10 bar">0...10 bar</option>
+                                <option value="0...16 bar">0...16 bar</option>
+                                <option value="0...25 bar">0...25 bar</option>
+                                <option value="0...40 bar">0...40 bar</option>
+                                <option value="0...60 bar">0...60 bar</option>
+                                <option value="0...100 bar">0...100 bar</option>
+                                <option value="0...160 bar">0...160 bar</option>
+                                <option value="0...250 bar">0...250 bar</option>
+                                <option value="0...400 bar">0...400 bar</option>
+                                <option value="0...600 bar">0...600 bar</option>
+                                <option value="0...1000 bar">0...1000 bar</option>
+                                <option value="0...1600 bar">0...1600 bar</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-section">
+                            <label class="form-label">6. Conexão ao Processo</label>
+                            <select class="form-control" id="conexao" onchange="updateConfiguration()">
+                                <option value="">Selecione...</option>
+                                <option value="G 1/4 B">G 1/4 B</option>
+                                <option value="1/4 NPT">1/4 NPT</option>
+                                <option value="G 1/2 B">G 1/2 B</option>
+                                <option value="1/2 NPT">1/2 NPT</option>
+                                <option value="M20 x 1,5">M20 x 1,5</option>
+                                <option value="G 3/8 B">G 3/8 B</option>
+                                <option value="R 1/4-ISO7 (DIN2999)">R 1/4-ISO7 (DIN2999)</option>
+                                <option value="R 3/8-ISO7 (DIN2999)">R 3/8-ISO7 (DIN2999)</option>
+                                <option value="R 1/2-ISO7 (DIN2999)">R 1/2-ISO7 (DIN2999)</option>
+                                <option value="EMICOgauge - vedação redundante metal-metal">EMICOgauge</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-section">
+                            <label class="form-label">7. Escala de Temperatura</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="escalaTemp" value="sem" onchange="updateConfiguration()" checked>
+                                    <span>Sem</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="escalaTemp" value="r717" onchange="updateConfiguration()">
+                                    <span>R717 (NH3)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="filter-section">
+                            <label class="form-label">8. Posição da Conexão</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="posicao" value="inferior" onchange="updateConfiguration()">
+                                    <span>Montagem Inferior</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="posicao" value="traseira" onchange="updateConfiguration()">
+                                    <span>Montagem Traseira (Excêntrica)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="filter-section">
+                            <label class="form-label">9. Falange/Suporte para Montagem</label>
+                            <select class="form-control" id="falange" onchange="updateConfiguration()">
+                                <option value="">Selecione...</option>
+                                <option value="Sem Falange">Sem Falange</option>
+                                <option value="Terminais Montagem Superfície">Terminais Montagem Superfície</option>
+                                <option value="Flange Frontal Aço Inox">Flange Frontal Aço Inox</option>
+                                <option value="Flange Frontal Aço Inox Polido">Flange Frontal Aço Inox Polido</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-section">
+                            <label class="form-label">10. Visor</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="visor" value="policarbonato" onchange="updateConfiguration()">
+                                    <span>Policarbonato</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="visor" value="vidro_seguranca" onchange="updateConfiguration()">
+                                    <span>Vidro de Segurança</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="filter-section">
+                            <label class="form-label">11. Restritor</label>
+                            <select class="form-control" id="restritor" onchange="updateConfiguration()">
+                                <option value="">Selecione...</option>
+                                <option value="Sem Restritor">Sem Restritor</option>
+                                <option value="Aço Inoxidável D 0,6">Aço Inoxidável D 0,6</option>
+                                <option value="Aço Inoxidável D 0,3">Aço Inoxidável D 0,3</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-section">
+                            <label class="form-label">12. Ponteiro</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="ponteiro" value="padrao" onchange="updateConfiguration()">
+                                    <span>Padrão</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="ponteiro" value="ajustavel" onchange="updateConfiguration()">
+                                    <span>Ajustável</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="ponteiro" value="vermelho" onchange="updateConfiguration()">
+                                    <span>Vermelho de Indicação/Arraste</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="ponteiro" value="ajustavel_ext_vermelho" onchange="updateConfiguration()">
+                                    <span>Ajustável Externamente Vermelho (Acoplado no Visor)</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="ponteiro" value="vermelho_arraste" onchange="updateConfiguration()">
+                                    <span>Arraste Vermelho Externamente Ajustável (Acoplado no Visor)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="filter-section">
+                            <label class="form-label">13. Característica Especial</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="caracteristica" value="nao" onchange="updateConfiguration()" checked>
+                                    <span>NÃO</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="caracteristica" value="livre_oleo" onchange="updateConfiguration()">
+                                    <span>Livre de Óleo e Graxa</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="caracteristica" value="limpo_oxigenio" onchange="updateConfiguration()">
+                                    <span>Limpo para Oxigênio</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="caracteristica" value="nace" onchange="updateConfiguration()">
+                                    <span>NACE Sour Gas Service</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="filter-section">
+                            <label class="form-label">14. Proteção Extra</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="protecaoExtra" value="nao" onchange="updateConfiguration()" checked>
+                                    <span>NÃO</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="protecaoExtra" value="sim" onchange="updateConfiguration()">
+                                    <span>SIM</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="filter-section">
+                            <label class="form-label">15. Tipo de Proteção Ex</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="protecaoEx" value="nenhuma" onchange="updateConfiguration()" checked>
+                                    <span>Nenhuma</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="protecaoEx" value="atex" onchange="updateConfiguration()">
+                                    <span>ATEX - Zona de Gás 1/Zona de Poeira 21</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="protecaoEx" value="eac_ex" onchange="updateConfiguration()">
+                                    <span>EAC ex - Zona de Gás 1/Zona de Poeira 21</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="filter-section">
+                            <label class="form-label">16. Certificação</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="certificacao" value="nao" onchange="updateConfiguration()" checked>
+                                    <span>NÃO</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="certificacao" value="qualidade" onchange="updateConfiguration()">
+                                    <span>Certificados Qualidade</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="certificacao" value="polones" onchange="updateConfiguration()">
+                                    <span>Certificado Calibração Polonês</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="certificacao" value="dkd" onchange="updateConfiguration()">
+                                    <span>Certificado DKD</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Panel - Product Visualization -->
+                    <div class="product-panel">
+                        <div class="product-visualization">
+                            <div class="product-image">
+                                <img id="productImage" src="/api/placeholder/300/300" alt="Manômetro" style="display: none;">
+                                <div id="productPlaceholder" class="image-placeholder">
+                                    <div class="placeholder-icon">📊</div>
+                                    <p>Configure o produto para visualizar</p>
+                                </div>
+                            </div>
+                            
+                            <div class="product-info">
+                                <h3 id="productName">Selecione as especificações</h3>
+                                <div id="productPartNumber" class="part-number">Part Number será gerado automaticamente</div>
+                                <div id="productPrice" class="price" style="display: none;"></div>
+                            </div>
+                        </div>
+
+                        <div class="specifications-table" id="specificationsTable">
+                            <h4>Especificações Técnicas</h4>
+                            <div class="spec-placeholder">
+                                Complete a configuração para ver as especificações
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="btn btn--primary btn--full-width" onclick="generatePDF()" id="generatePdfBtn" disabled>
+                                📄 Gerar DataSheet PDF
+                            </button>
+                            <button class="btn btn--secondary btn--full-width" onclick="requestQuote()" id="requestQuoteBtn" disabled>
+                                💬 Solicitar Cotação
+                            </button>
+                            <button class="btn btn--outline btn--full-width" onclick="resetConfiguration()">
+                                🔄 Nova Configuração
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Quote Modal -->
+    <div class="modal hidden" id="quoteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Solicitar Cotação</h3>
+                <button class="modal-close" onclick="closeQuoteModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="quoteForm" onsubmit="submitQuote(event)">
+                    <div class="form-group">
+                        <label class="form-label">Nome *</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email *</label>
+                        <input type="email" class="form-control" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Empresa</label>
+                        <input type="text" class="form-control" name="company">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Telefone</label>
+                        <input type="tel" class="form-control" name="phone">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Quantidade</label>
+                        <input type="number" class="form-control" name="quantity" min="1" value="1">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Observações</label>
+                        <textarea class="form-control" name="notes" rows="3" placeholder="Informações adicionais sobre sua aplicação..."></textarea>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn--outline" onclick="closeQuoteModal()">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn--primary">
+                            Enviar Cotação
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
