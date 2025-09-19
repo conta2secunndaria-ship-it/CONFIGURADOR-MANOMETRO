@@ -977,13 +977,6 @@ select.form-control {
   border: 1px solid rgba(31, 128, 204, 0.2);
 }
 
-.price {
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-success);
-  margin-bottom: var(--space-16);
-}
-
 /* Specifications Table */
 .specifications-table {
   background-color: var(--color-surface);
