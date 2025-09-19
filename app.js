@@ -266,7 +266,6 @@ function updateProductVisualization() {
     const productPlaceholder = document.getElementById('productPlaceholder');
     const productName = document.getElementById('productName');
     const productPartNumber = document.getElementById('productPartNumber');
-    const productPrice = document.getElementById('productPrice');
     
     // Check if we have a matching product
     const matchingProduct = findMatchingProduct();
@@ -278,22 +277,18 @@ function updateProductVisualization() {
         productPlaceholder.style.display = 'none';
         productName.textContent = matchingProduct.nome;
         productPartNumber.textContent = `Part Number: ${matchingProduct.part_number}`;
-        productPrice.textContent = `Preço: ${matchingProduct.preco}`;
-        productPrice.style.display = 'block';
     } else if (isConfigurationPartial()) {
         // Show configured product info
         productImage.style.display = 'none';
         productPlaceholder.style.display = 'flex';
         productName.textContent = generateProductName();
         productPartNumber.textContent = `Part Number: ${generatePartNumber()}`;
-        productPrice.style.display = 'none';
     } else {
         // Show placeholder
         productImage.style.display = 'none';
         productPlaceholder.style.display = 'flex';
         productName.textContent = 'Selecione as especificações';
         productPartNumber.textContent = 'Part Number será gerado automaticamente';
-        productPrice.style.display = 'none';
     }
 }
 
